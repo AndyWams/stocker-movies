@@ -7,13 +7,21 @@ const Movies = ({
   movies,
   onDelete,
   currentPage,
+  selectedGenre,
   onToggleLiked,
   OnHandlePageChange,
 }) => {
   const [pageSize] = useState(4);
-  const allmovies = Paginate(movies, currentPage, pageSize);
+  const filtered =
+    selectedGenre && selectedGenre.id
+      ? movies.filter((movie) => movie.genre === selectedGenre.name)
+      : movies;
+  const allmovies = Paginate(filtered, currentPage, pageSize);
   return (
     <React.Fragment>
+      <p>
+        showing {filtered.length} <strong>movies</strong> in the database
+      </p>
       <table className="table table-hover">
         <thead>
           <tr>
@@ -51,7 +59,7 @@ const Movies = ({
         </tbody>
       </table>
       <Pagination
-        itemCount={movies.length}
+        itemCount={filtered.length}
         currentPage={currentPage}
         pageSize={pageSize}
         onPageChange={OnHandlePageChange}

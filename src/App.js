@@ -10,6 +10,7 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedGenre, setSelectedGenre] = useState("");
   //Lifecycle method
   useEffect(() => {
     const getMovies = async () => {
@@ -18,8 +19,8 @@ function App() {
     };
     const getGenres = async () => {
       const genresFromServer = await fetchGenres();
-      console.log(genresFromServer);
-      setGenres(genresFromServer);
+      const allGenres = [{ name: "All Genres" }, ...genresFromServer];
+      setGenres(allGenres);
     };
     getMovies();
     getGenres();
@@ -94,7 +95,7 @@ function App() {
 
   //Handle Genre Selection
   const handleGenreSelect = (genre) => {
-    console.log(genre);
+    setSelectedGenre(genre);
   };
 
   return (
@@ -110,21 +111,18 @@ function App() {
                 <div className={`main__wrapper`}>
                   <FilterList
                     items={genres}
-                    valueProperty="id"
-                    textProperty="name"
+                    selectedItem={selectedGenre}
                     onItemSelect={handleGenreSelect}
                   />
                   <div>
                     <h3>All Movies</h3>
-                    <p>
-                      showing {movies.length} <strong>movies</strong> in the
-                      database
-                    </p>
+
                     <Movies
                       movies={movies}
                       onDelete={deleteMovie}
                       onToggleLiked={toggleLiked}
                       OnHandlePageChange={handlePageChange}
+                      selectedGenre={selectedGenre}
                       currentPage={currentPage}
                     />
                   </div>

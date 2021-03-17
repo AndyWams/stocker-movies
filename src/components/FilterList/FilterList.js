@@ -1,18 +1,36 @@
-const FilterList = ({ items, valueProperty, textProperty, onItemSelect }) => {
+const FilterList = ({
+  items,
+  valueProperty,
+  selectedItem,
+  textProperty,
+  onItemSelect,
+}) => {
   return (
     <div className="list-group">
-      {items.map((item) => (
-        <button
-          key={item[valueProperty]}
-          type="button"
-          className="list-group-item list-group-item-action"
-          aria-current="true"
-        >
-          {item[textProperty]}
-        </button>
-      ))}
+      <div>
+        {items.map((item) => (
+          <button
+            key={item[textProperty]}
+            type="button"
+            className={
+              item === selectedItem
+                ? "list-group-item list-group-item-action active"
+                : "list-group-item list-group-item-action"
+            }
+            aria-current="true"
+            onClick={() => onItemSelect(item)}
+          >
+            {item[textProperty]}
+          </button>
+        ))}
+      </div>
     </div>
   );
+};
+
+FilterList.defaultProps = {
+  textProperty: "name",
+  valueProperty: "id",
 };
 
 export default FilterList;
