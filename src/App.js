@@ -1,24 +1,144 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.scss";
+import { useState, useEffect } from "react";
+import Header from "./components/Header/Header";
+import CreateMovie from "./components/CreateMovie/CreateMovie";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import Movies from "./components/Movies/Movies";
+import FilterList from "./components/FilterList/FilterList";
 
 function App() {
+  const [movies, setMovies] = useState([]);
+  const [genres, setGenres] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  //Lifecycle method
+  useEffect(() => {
+    const getMovies = async () => {
+      const moviesFromServer = await fetchMovies();
+      setMovies(moviesFromServer);
+    };
+    const getGenres = async () => {
+      const genresFromServer = await fetchGenres();
+      console.log(genresFromServer);
+      setGenres(genresFromServer);
+    };
+    getMovies();
+    getGenres();
+  }, []);
+
+  //Get tasks
+  const fetchMovies = async () => {
+    const res = await fetch("http://localhost:5000/movies");
+    const data = await res.json();
+    return data;
+  };
+  //Get genres
+  const fetchGenres = async () => {
+    const res = await fetch("http://localhost:5000/genres");
+    const data = await res.json();
+    return data;
+  };
+
+  //Get task
+  const getMovie = async (id) => {
+    const res = await fetch(`http://localhost:5000/movies/${id}`);
+    const data = await res.json();
+    return data;
+  };
+  //Add Task
+  const addMovie = async (movie) => {
+    const res = await fetch("http://localhost:5000/movies", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(movie),
+    });
+
+    const data = await res.json();
+    setMovies([...movies, data]);
+  };
+
+  //Delete Task
+  const deleteMovie = async (id) => {
+    await fetch(`http://localhost:5000/movies/${id}`, {
+      method: "DELETE",
+    });
+    setMovies(movies.filter((movie) => movie.id !== id));
+  };
+
+  //Toggle Liked
+  const toggleLiked = async (id) => {
+    const movieToToggle = await getMovie(id);
+    let updateMovie = { ...movieToToggle, liked: !movieToToggle.liked };
+
+    const res = await fetch(`http://localhost:5000/movies/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updateMovie),
+    });
+
+    const data = await res.json();
+
+    setMovies(
+      movies.map((movie) =>
+        movie.id === id ? { ...movie, liked: data.liked } : movie
+      )
+    );
+  };
+  //Handle Page Change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  //Handle Genre Selection
+  const handleGenreSelect = (genre) => {
+    console.log(genre);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <main className="main">
+        <Header />
+        <div className="container">
+          <Route
+            path="/"
+            exact
+            render={() => (
+              <>
+                <div className={`main__wrapper`}>
+                  <FilterList
+                    items={genres}
+                    valueProperty="id"
+                    textProperty="name"
+                    onItemSelect={handleGenreSelect}
+                  />
+                  <div>
+                    <h3>All Movies</h3>
+                    <p>
+                      showing {movies.length} <strong>movies</strong> in the
+                      database
+                    </p>
+                    <Movies
+                      movies={movies}
+                      onDelete={deleteMovie}
+                      onToggleLiked={toggleLiked}
+                      OnHandlePageChange={handlePageChange}
+                      currentPage={currentPage}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+          />
+          <Route
+            path="/create-movie"
+            render={() => <CreateMovie addMovie={addMovie} />}
+          />
+        </div>
+      </main>
+    </Router>
   );
 }
 

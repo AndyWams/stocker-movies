@@ -1,0 +1,11 @@
+.main__wrapper {
+  padding: 4em 0em 2em;
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-column-gap: 40px;
+  h3 {
+    margin-bottom: 2em;
+    font-size: 25px;
+    font-weight: bold;
+  }
+}

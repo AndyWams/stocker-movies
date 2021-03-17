@@ -1,0 +1,94 @@
+{
+  "movies": [
+    {
+      "title": "Rambo",
+      "genre": "Action",
+      "rating": "4",
+      "stock": "5",
+      "liked": false,
+      "id": 1
+    },
+    {
+      "title": "Mr Bean",
+      "genre": "Comedy",
+      "rating": "10",
+      "stock": "7",
+      "liked": true,
+      "id": 2
+    },
+    {
+      "title": "Die Hard",
+      "genre": "Action",
+      "rating": "9",
+      "stock": "4",
+      "liked": true,
+      "id": 3
+    },
+    {
+      "title": "Jurassic Park",
+      "genre": "Fantasy",
+      "rating": "6",
+      "stock": "5",
+      "liked": false,
+      "id": 4
+    },
+    {
+      "title": "Avengers",
+      "genre": "Action",
+      "rating": "8.9",
+      "stock": "5",
+      "liked": false,
+      "id": 5
+    },
+    {
+      "title": "Justice League",
+      "genre": "Action",
+      "rating": "9.9",
+      "stock": "1",
+      "liked": false,
+      "id": 6
+    },
+    {
+      "title": "Simpsons",
+      "genre": "Comedy",
+      "rating": "10",
+      "stock": "10",
+      "liked": false,
+      "id": 7
+    },
+    {
+      "title": "Monster Hunter",
+      "genre": "Action",
+      "rating": "9.0",
+      "stock": "3",
+      "liked": false,
+      "id": 8
+    },
+    {
+      "title": "Raya and the Last Dragon",
+      "genre": "Action, Fantasy, Family",
+      "rating": "7.5",
+      "stock": "3",
+      "liked": true,
+      "id": 9
+    }
+  ],
+  "genres": [
+    {
+      "id": 1,
+      "name": "Action"
+    },
+    {
+      "id": 2,
+      "name": "Comedy"
+    },
+    {
+      "id": 3,
+      "name": "Thriller"
+    },
+    {
+      "id": 4,
+      "name": "Fantasy"
+    }
+  ]
+}

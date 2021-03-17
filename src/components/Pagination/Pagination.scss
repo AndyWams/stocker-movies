@@ -1,0 +1,8 @@
+.pagination__wrapper {
+  display: flex;
+  justify-content: center;
+
+  .page-link {
+    cursor: pointer;
+  }
+}
