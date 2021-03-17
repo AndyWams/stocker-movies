@@ -1,10 +1,4 @@
-const FilterList = ({
-  items,
-  valueProperty,
-  selectedItem,
-  textProperty,
-  onItemSelect,
-}) => {
+const FilterList = ({ items, selectedItem, textProperty, onItemSelect }) => {
   return (
     <div className="list-group">
       <div>

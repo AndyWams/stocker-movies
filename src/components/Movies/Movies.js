@@ -3,6 +3,7 @@ import Button from "../Button/Button";
 import Favorite from "../Favorite/Favorite";
 import Pagination from "../Pagination/Pagination";
 import Paginate from "../Utils/Paginate";
+import _ from "lodash";
 const Movies = ({
   movies,
   onDelete,
@@ -10,26 +11,40 @@ const Movies = ({
   selectedGenre,
   onToggleLiked,
   OnHandlePageChange,
+  onSort,
+  sortColumn,
 }) => {
   const [pageSize] = useState(4);
   const filtered =
     selectedGenre && selectedGenre.id
       ? movies.filter((movie) => movie.genre === selectedGenre.name)
       : movies;
-  const allmovies = Paginate(filtered, currentPage, pageSize);
+  const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+  const allmovies = Paginate(sorted, currentPage, pageSize);
   return (
     <React.Fragment>
+      <h3>All Movies</h3>
       <p>
         showing {filtered.length} <strong>movies</strong> in the database
       </p>
       <table className="table table-hover">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">Title</th>
-            <th scope="col">Genre</th>
-            <th scope="col">Stock</th>
-            <th scope="col">Rating</th>
+            <th scope="col" onClick={() => onSort("id")}>
+              #
+            </th>
+            <th scope="col" onClick={() => onSort("title")}>
+              Title
+            </th>
+            <th scope="col" onClick={() => onSort("genre")}>
+              Genre
+            </th>
+            <th scope="col" onClick={() => onSort("stock")}>
+              Stock
+            </th>
+            <th scope="col" onClick={() => onSort("rating")}>
+              Rating
+            </th>
             <th scope="col">Liked</th>
             <th scope="col">Action</th>
           </tr>

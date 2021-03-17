@@ -3,7 +3,7 @@ const Favorite = ({ movie, onToggle }) => {
   if (!movie.liked) likedClass += "-o";
   return (
     <i
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer", color: "#dc3545" }}
       className={likedClass}
       aria-hidden="true"
       onClick={() => onToggle(movie.id)}

@@ -11,6 +11,11 @@ function App() {
   const [genres, setGenres] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedGenre, setSelectedGenre] = useState("");
+  const [sortColumn, setSortColumn] = useState({
+    path: "title",
+    order: "asc",
+  });
+
   //Lifecycle method
   useEffect(() => {
     const getMovies = async () => {
@@ -32,6 +37,7 @@ function App() {
     const data = await res.json();
     return data;
   };
+
   //Get genres
   const fetchGenres = async () => {
     const res = await fetch("http://localhost:5000/genres");
@@ -45,6 +51,7 @@ function App() {
     const data = await res.json();
     return data;
   };
+
   //Add Task
   const addMovie = async (movie) => {
     const res = await fetch("http://localhost:5000/movies", {
@@ -60,7 +67,7 @@ function App() {
   };
 
   //Delete Task
-  const deleteMovie = async (id) => {
+  const handleDelete = async (id) => {
     await fetch(`http://localhost:5000/movies/${id}`, {
       method: "DELETE",
     });
@@ -68,7 +75,7 @@ function App() {
   };
 
   //Toggle Liked
-  const toggleLiked = async (id) => {
+  const handleToggleLiked = async (id) => {
     const movieToToggle = await getMovie(id);
     let updateMovie = { ...movieToToggle, liked: !movieToToggle.liked };
 
@@ -88,6 +95,7 @@ function App() {
       )
     );
   };
+
   //Handle Page Change
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -96,6 +104,11 @@ function App() {
   //Handle Genre Selection
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre);
+  };
+
+  //Handle Sort
+  const handleSort = (path) => {
+    setSortColumn({ path, order: "asc" });
   };
 
   return (
@@ -115,15 +128,15 @@ function App() {
                     onItemSelect={handleGenreSelect}
                   />
                   <div>
-                    <h3>All Movies</h3>
-
                     <Movies
                       movies={movies}
-                      onDelete={deleteMovie}
-                      onToggleLiked={toggleLiked}
+                      onDelete={handleDelete}
+                      onToggleLiked={handleToggleLiked}
                       OnHandlePageChange={handlePageChange}
                       selectedGenre={selectedGenre}
                       currentPage={currentPage}
+                      onSort={handleSort}
+                      sortColumn={sortColumn}
                     />
                   </div>
                 </div>
