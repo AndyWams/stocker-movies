@@ -10,5 +10,10 @@
   }
   .table thead {
     cursor: pointer;
+    th {
+      i {
+        margin-left: 10px;
+      }
+    }
   }
 }

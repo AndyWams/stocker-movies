@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
-import Button from "../Button/Button";
-import Favorite from "../Favorite/Favorite";
+import { MovieContext } from "../../context/MovieContext";
 import Pagination from "../Pagination/Pagination";
 import Paginate from "../Utils/Paginate";
-import { MovieContext } from "../../context/MovieContext";
+import MovieTable from "../Partials/MovieTable";
 import _ from "lodash";
 
 const Movies = ({ selectedGenre }) => {
-  const [pageSize] = useState(4);
+  const [pageSize] = useState(5);
   const [movies, setMovies] = useContext(MovieContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState({
@@ -60,8 +59,8 @@ const Movies = ({ selectedGenre }) => {
     );
   };
   //Handle Sort
-  const handleSort = (path) => {
-    setSortColumn({ path, order: "asc" });
+  const handleSort = (sortcolumn) => {
+    setSortColumn(sortcolumn);
   };
 
   //Handle Page Change
@@ -76,68 +75,37 @@ const Movies = ({ selectedGenre }) => {
     });
     setMovies(movies.filter((movie) => movie.id !== id));
   };
+  const getPageData = () => {
+    const filtered =
+      selectedGenre && selectedGenre.id
+        ? movies.filter((movie) => movie.genre === selectedGenre.name)
+        : movies;
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+    const allmovies = Paginate(sorted, currentPage, pageSize);
+    return {
+      totalCount: filtered.length,
+      data: allmovies,
+    };
+  };
 
-  const filtered =
-    selectedGenre && selectedGenre.id
-      ? movies.filter((movie) => movie.genre === selectedGenre.name)
-      : movies;
-  const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
-  const allmovies = Paginate(sorted, currentPage, pageSize);
-
+  const { totalCount, data: allmovies } = getPageData();
   return (
     <React.Fragment>
       <h3>All Movies</h3>
       <p>
-        showing {filtered.length} <strong>movies</strong> in the database
+        showing {totalCount} <strong>movies</strong> in the database
       </p>
-      <table className="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col" onClick={() => handleSort("id")}>
-              #
-            </th>
-            <th scope="col" onClick={() => handleSort("title")}>
-              Title
-            </th>
-            <th scope="col" onClick={() => handleSort("genre")}>
-              Genre
-            </th>
-            <th scope="col" onClick={() => handleSort("stock")}>
-              Stock
-            </th>
-            <th scope="col" onClick={() => handleSort("rating")}>
-              Rating
-            </th>
-            <th scope="col">Liked</th>
-            <th scope="col">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {allmovies.map((movie) => {
-            return (
-              <tr key={movie.id}>
-                <th scope="row">{movie.id}</th>
-                <td>{movie.title}</td>
-                <td>{movie.genre}</td>
-                <td>{movie.stock}</td>
-                <td>{movie.rating}</td>
-                <td>
-                  <Favorite movie={movie} onToggle={handleToggleLiked} />
-                </td>
-                <td>
-                  <Button
-                    bgcolor="btn--danger btn-md"
-                    btntext="Delete"
-                    onClick={() => handleDelete(movie.id)}
-                  />
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+
+      <MovieTable
+        onDelete={handleDelete}
+        onToggleLike={handleToggleLiked}
+        onHandleSort={handleSort}
+        allmovies={allmovies}
+        sortColumn={sortColumn}
+        onSort={handleSort}
+      />
       <Pagination
-        itemCount={filtered.length}
+        itemCount={totalCount}
         currentPage={currentPage}
         pageSize={pageSize}
         onPageChange={handlePageChange}

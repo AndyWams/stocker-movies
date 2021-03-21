@@ -9,14 +9,6 @@
       "id": 1
     },
     {
-      "title": "Mr Bean",
-      "genre": "Comedy",
-      "rating": "10",
-      "stock": "7",
-      "liked": true,
-      "id": 2
-    },
-    {
       "title": "Die Hard",
       "genre": "Action",
       "rating": "9",
@@ -71,6 +63,14 @@
       "stock": "3",
       "liked": false,
       "id": 9
+    },
+    {
+      "title": "Batman",
+      "genre": "Action",
+      "rating": "5",
+      "stock": "3",
+      "liked": false,
+      "id": 10
     }
   ],
   "genres": [

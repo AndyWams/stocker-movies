@@ -1,4 +1,5 @@
 import { useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Button from "../Button/Button";
 import "./CreateMovie.scss";
 import { MovieContext } from "../../context/MovieContext";
@@ -11,6 +12,7 @@ const CreateMovie = () => {
   const [rating, setRating] = useState("");
   const [liked, setLiked] = useState(false);
   const [success, setSuccess] = useState(false);
+  const history = useHistory();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -22,6 +24,7 @@ const CreateMovie = () => {
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
+        history.replace("/");
       }, 2000);
       setTitle("");
       setGenre("");
