@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import Button from "../Button/Button";
 import "./CreateMovie.scss";
+import { MovieContext } from "../../context/MovieContext";
 
-const CreateMovie = ({ addMovie }) => {
+const CreateMovie = () => {
+  const [movies, setMovies] = useContext(MovieContext);
   const [title, setTitle] = useState("");
   const [genre, setGenre] = useState("");
   const [stock, setStock] = useState("");
   const [rating, setRating] = useState("");
   const [liked, setLiked] = useState(false);
   const [success, setSuccess] = useState(false);
+
   const onSubmit = (e) => {
     e.preventDefault();
     if (!title) {
@@ -27,6 +30,21 @@ const CreateMovie = ({ addMovie }) => {
       setLiked(false);
     }
   };
+
+  //Add Movie
+  const addMovie = async (movie) => {
+    const res = await fetch("http://localhost:5000/movies", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(movie),
+    });
+
+    const data = await res.json();
+    setMovies([...movies, data]);
+  };
+
   return (
     <div className="container__wrap">
       <div className={`container   ${success ? "visible" : ""}`}>

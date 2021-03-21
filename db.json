@@ -29,7 +29,7 @@
       "genre": "Fantasy",
       "rating": "6",
       "stock": "5",
-      "liked": false,
+      "liked": true,
       "id": 4
     },
     {
@@ -37,7 +37,7 @@
       "genre": "Action",
       "rating": "8.9",
       "stock": "5",
-      "liked": false,
+      "liked": true,
       "id": 5
     },
     {
@@ -45,7 +45,7 @@
       "genre": "Action",
       "rating": "9.9",
       "stock": "1",
-      "liked": false,
+      "liked": true,
       "id": 6
     },
     {
@@ -65,8 +65,8 @@
       "id": 8
     },
     {
-      "title": "Raya and the Last Dragon",
-      "genre": "Action, Fantasy, Family",
+      "title": "Man of Steel",
+      "genre": "Action",
       "rating": "7.5",
       "stock": "3",
       "liked": false,
