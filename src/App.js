@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import Header from "./components/Header/Header";
-import CreateMovie from "./components/CreateMovie/CreateMovie";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
 } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import { MovieProvider } from "./context/MovieContext";
 import Movies from "./components/Movies/Movies";
 import FilterList from "./components/FilterList/FilterList";
-import { MovieProvider } from "./context/MovieContext";
 import NotFound from "./components/NotFound/NotFound";
 import LoginForm from "./components/Auth/LoginForm";
 import RegisterForm from "./components/Auth/RegisterForm";
-import { ToastContainer } from "react-toastify";
+import CreateMovie from "./components/CreateMovie/CreateMovie";
 import "react-toastify/dist/ReactToastify.css";
-
 import "./App.scss";
 
 function App() {

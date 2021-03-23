@@ -12,7 +12,7 @@ const FilterList = ({ textProperty, selectedGenre, onHandleGenreSelect }) => {
       setGenres(allGenres);
     };
     getGenres();
-  }, []);
+  }, [setGenres]);
 
   //Get genres
   const fetchGenres = async () => {

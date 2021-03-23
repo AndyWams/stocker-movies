@@ -6,7 +6,7 @@ const Favorite = ({ movie, onToggle }) => {
       style={{ cursor: "pointer", color: "#dc3545" }}
       className={likedClass}
       aria-hidden="true"
-      onClick={() => onToggle(movie.id)}
+      onClick={() => onToggle(movie._id)}
     ></i>
   );
 };

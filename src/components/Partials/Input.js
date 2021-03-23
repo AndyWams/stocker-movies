@@ -1,15 +1,8 @@
-const Input = ({ name, label, value, error, onChange, placeholder }) => {
+const Input = ({ name, label, error, ...rest }) => {
   return (
     <div className="form-group input">
       <label>{label}</label>
-      <input
-        type="text"
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className="form-control "
-      />
+      <input {...rest} name={name} className="form-control " />
       {error && <div className="alert alert-danger my-2">{error}</div>}
     </div>
   );

@@ -11,6 +11,9 @@ button {
   &:focus {
     outline: none;
   }
+  &:disabled {
+    background: #9e9e9e;
+  }
 }
 
 .btn--primary {

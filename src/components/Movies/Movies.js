@@ -1,97 +1,108 @@
-import React, { useState, useEffect, useContext } from "react";
-import { MovieContext } from "../../context/MovieContext";
-import Pagination from "../Pagination/Pagination";
-import Paginate from "../Utils/Paginate";
-import MovieTable from "../Partials/MovieTable";
-import { Link } from "react-router-dom";
-import { GetMovies, DeleteMovie } from "../../service/movieService";
-import _ from "lodash";
+import React, { useState, useEffect, useContext } from 'react'
+import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import { MovieContext } from '../../context/MovieContext'
+import {
+  GetMovies,
+  DeleteMovie,
+  GetMovie,
+  UpdateLike,
+} from '../../service/movieService'
+import Pagination from '../Pagination/Pagination'
+import Paginate from '../Utils/Paginate'
+import MovieTable from '../Partials/MovieTable'
+import _ from 'lodash'
 
-const Movies = ({ selectedGenre, setSelectedGenre }) => {
-  const [pageSize] = useState(5);
-  const [movies, setMovies] = useContext(MovieContext);
-  const [currentPage, setCurrentPage] = useState(1);
+const Movies = ({ selectedGenre }) => {
+  const [pageSize] = useState(5)
+  const [movies, setMovies] = useContext(MovieContext)
+  const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState({
-    path: "_id",
-    order: "asc",
-  });
+    path: '_id',
+    order: 'asc',
+  })
 
   //Lifecycle method
   useEffect(() => {
     const getMovies = async () => {
-      const moviesFromServer = await fetchMovies();
-      setMovies(moviesFromServer);
-    };
-    getMovies();
-  }, [setMovies]);
+      try {
+        const moviesFromServer = await fetchMovies()
+        setMovies(moviesFromServer)
+      } catch (ex) {
+        console.log(ex)
+      }
+    }
+    getMovies()
+  }, [setMovies])
 
   //Get Movies
   const fetchMovies = async () => {
-    const { data } = await GetMovies();
-    return data;
-  };
+    const { data } = await GetMovies()
+    return data
+  }
 
   //Get Movie
-  const getMovie = async (id) => {
-    const res = await fetch(`http://localhost:5000/movies/${id}`);
-    const data = await res.json();
-    return data;
-  };
+  const fetchMovie = async (id) => {
+    const { data } = await GetMovie(id)
+    return data
+  }
 
   //Toggle Liked
   const handleToggleLiked = async (id) => {
-    const movieToToggle = await getMovie(id);
-    let updateMovie = { ...movieToToggle, liked: !movieToToggle.liked };
-
-    const res = await fetch(`http://localhost:5000/movies/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updateMovie),
-    });
-
-    const data = await res.json();
-
+    const movieToToggle = await fetchMovie(id)
+    const like = false
+    let updateMovie = { ...movieToToggle, liked: !like }
     setMovies(
       movies.map((movie) =>
-        movie.id === id ? { ...movie, liked: data.liked } : movie
-      )
-    );
-  };
+        movie._id === id ? { ...movie, liked: updateMovie.liked } : movie,
+      ),
+    )
+    try {
+      await UpdateLike(id, updateMovie)
+    } catch (ex) {
+      console.log(ex)
+    }
+  }
+
   //Handle Sort
   const handleSort = (sortcolumn) => {
-    setSortColumn(sortcolumn);
-  };
+    setSortColumn(sortcolumn)
+  }
 
   //Handle Page Change
   const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
+    setCurrentPage(page)
+  }
 
-  //Delete Task
+  //Delete Movie
   const handleDelete = async (id) => {
-    console.log(id);
-
-    await DeleteMovie(id);
-    setMovies(movies.filter((movie) => movie._id !== id));
-  };
+    setMovies(movies.filter((movie) => movie._id !== id))
+    try {
+      await DeleteMovie(id)
+      toast.success('Movie successfully deleted')
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        toast.error('This movie has already been deleted')
+        setMovies(movies)
+      }
+    }
+  }
 
   //Filter/Sort/Paginate
   const getPageData = () => {
     const filtered =
       selectedGenre && selectedGenre._id
         ? movies.filter((movie) => movie.genre.name === selectedGenre.name)
-        : movies;
-    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
-    const allmovies = Paginate(sorted, currentPage, pageSize);
+        : movies
+    const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+    const allmovies = Paginate(sorted, currentPage, pageSize)
     return {
       totalCount: filtered.length,
       data: allmovies,
-    };
-  };
+    }
+  }
 
-  const { totalCount, data: allmovies } = getPageData();
+  const { totalCount, data } = getPageData()
   return (
     <React.Fragment>
       <div className="d-flex justify-content-between mb-4">
@@ -108,7 +119,7 @@ const Movies = ({ selectedGenre, setSelectedGenre }) => {
         onDelete={handleDelete}
         onToggleLike={handleToggleLiked}
         onHandleSort={handleSort}
-        allmovies={allmovies}
+        allmovies={data}
         sortColumn={sortColumn}
         onSort={handleSort}
       />
@@ -119,7 +130,7 @@ const Movies = ({ selectedGenre, setSelectedGenre }) => {
         onPageChange={handlePageChange}
       />
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default Movies;
+export default Movies

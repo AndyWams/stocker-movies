@@ -1,8 +1,8 @@
 import { useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { MovieContext } from "../../context/MovieContext";
 import Button from "../Button/Button";
 import "./CreateMovie.scss";
-import { MovieContext } from "../../context/MovieContext";
 
 const CreateMovie = () => {
   const [movies, setMovies] = useContext(MovieContext);

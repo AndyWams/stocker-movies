@@ -12,6 +12,7 @@
 /build
 .firebase
 /src/config
+/vidly-api-node-master
 db.json
 
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Button from "../Button/Button";
 import Input from "../Partials/Input";
 import Joi from "joi-browser";
+
 const RegisterForm = () => {
   const [data, setData] = useState({
     email: "",
@@ -11,7 +12,7 @@ const RegisterForm = () => {
   const [errors, setErrors] = useState({});
 
   //Joi-browser schema validation
-  const schema = {
+  const Schema = {
     email: Joi.string().required().label("Email").email(),
     username: Joi.string().min(3).required().label("Username"),
     password: Joi.string().required().min(3).label("Password"),
@@ -20,15 +21,21 @@ const RegisterForm = () => {
   // Custom validation method
   const validate = () => {
     const options = { abortEarly: false };
-    const { error } = Joi.validate(data, schema, options);
+    const { error } = Joi.validate(data, Schema, options);
     if (!error) return null;
     const errors = {};
-    console.log(errors);
-
     for (let item of error.details) {
       errors[item.path[0]] = item.message;
     }
     return errors;
+  };
+
+  //Validate On Input Change
+  const validateInput = ({ name, value }) => {
+    const obj = { [name]: value };
+    const schema = { [name]: Schema[name] };
+    const { error } = Joi.validate(obj, schema);
+    return error ? error.details[0].message : null;
   };
 
   const handleSubmit = (e) => {
@@ -36,6 +43,52 @@ const RegisterForm = () => {
     const all_errors = validate();
     setErrors(all_errors || {});
     if (all_errors) return;
+    doSubmit();
+    //call to server
+  };
+
+  const doSubmit = () => {
+    //call to server
+    console.log("submitted");
+  };
+
+  //On input Change
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    const errorMessage = validateInput({ name, value });
+    if (errorMessage) {
+      errors[name] = errorMessage;
+    } else {
+      delete errors[name];
+    }
+    setData((prevProps) => ({
+      ...prevProps,
+      [name]: value,
+    }));
+    setErrors(errors);
+  };
+  //Render Input Fields
+  const renderInput = (name, label, type = "text") => {
+    return (
+      <Input
+        type={type}
+        label={label}
+        name={name}
+        value={data[name]}
+        onChange={handleInputChange}
+        error={errors[name]}
+      />
+    );
+  };
+  //Render Button
+  const renderButton = () => {
+    return (
+      <Button
+        disabled={validate()}
+        bgcolor="btn--secondary"
+        btntext="Register"
+      />
+    );
   };
 
   return (
@@ -47,44 +100,10 @@ const RegisterForm = () => {
       >
         <h3>Register</h3>
         <hr />
-        <Input
-          label="Email"
-          name="email"
-          value={data.email}
-          onChange={(event) =>
-            setData({
-              ...data,
-              email: event.target.value,
-            })
-          }
-          error={errors.email}
-        />
-
-        <Input
-          label="Username"
-          name="username"
-          value={data.username}
-          onChange={(event) =>
-            setData({
-              ...data,
-              username: event.target.value,
-            })
-          }
-          error={errors.username}
-        />
-        <Input
-          label="Password"
-          name="password"
-          value={data.password}
-          onChange={(event) =>
-            setData({
-              ...data,
-              password: event.target.value,
-            })
-          }
-          error={errors.password}
-        />
-        <Button bgcolor="btn--secondary" btntext="Register" />
+        {renderInput("email", "Email")}
+        {renderInput("username", "Username")}
+        {renderInput("password", "Password", "password")}
+        {renderButton()}
       </form>
     </div>
   );
