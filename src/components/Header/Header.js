@@ -8,7 +8,7 @@ const Navbar = () => {
             Stocker Movies
           </NavLink>
           <ul className="navbar-nav d-flex flex-row">
-            <li className="nav-item active">
+            <li className="nav-item">
               <NavLink className="nav-link mr-4" to="/login">
                 Login
               </NavLink>

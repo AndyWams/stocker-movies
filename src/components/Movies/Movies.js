@@ -3,14 +3,16 @@ import { MovieContext } from "../../context/MovieContext";
 import Pagination from "../Pagination/Pagination";
 import Paginate from "../Utils/Paginate";
 import MovieTable from "../Partials/MovieTable";
+import { Link } from "react-router-dom";
+import { GetMovies, DeleteMovie } from "../../service/movieService";
 import _ from "lodash";
 
-const Movies = ({ selectedGenre }) => {
+const Movies = ({ selectedGenre, setSelectedGenre }) => {
   const [pageSize] = useState(5);
   const [movies, setMovies] = useContext(MovieContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortColumn, setSortColumn] = useState({
-    path: "id",
+    path: "_id",
     order: "asc",
   });
 
@@ -25,12 +27,11 @@ const Movies = ({ selectedGenre }) => {
 
   //Get Movies
   const fetchMovies = async () => {
-    const res = await fetch("http://localhost:5000/movies");
-    const data = await res.json();
+    const { data } = await GetMovies();
     return data;
   };
 
-  //Get task
+  //Get Movie
   const getMovie = async (id) => {
     const res = await fetch(`http://localhost:5000/movies/${id}`);
     const data = await res.json();
@@ -70,15 +71,17 @@ const Movies = ({ selectedGenre }) => {
 
   //Delete Task
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:5000/movies/${id}`, {
-      method: "DELETE",
-    });
-    setMovies(movies.filter((movie) => movie.id !== id));
+    console.log(id);
+
+    await DeleteMovie(id);
+    setMovies(movies.filter((movie) => movie._id !== id));
   };
+
+  //Filter/Sort/Paginate
   const getPageData = () => {
     const filtered =
-      selectedGenre && selectedGenre.id
-        ? movies.filter((movie) => movie.genre === selectedGenre.name)
+      selectedGenre && selectedGenre._id
+        ? movies.filter((movie) => movie.genre.name === selectedGenre.name)
         : movies;
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
     const allmovies = Paginate(sorted, currentPage, pageSize);
@@ -91,11 +94,16 @@ const Movies = ({ selectedGenre }) => {
   const { totalCount, data: allmovies } = getPageData();
   return (
     <React.Fragment>
-      <h3>All Movies</h3>
+      <div className="d-flex justify-content-between mb-4">
+        <h3>All Movies</h3>
+        <Link to="create-movie" className="btn--link">
+          Create Movies
+        </Link>
+      </div>
       <p>
         showing {totalCount} <strong>movies</strong> in the database
       </p>
-
+      {/* <Searchbox value={searchQuery} onChange={handleSearch} /> */}
       <MovieTable
         onDelete={handleDelete}
         onToggleLike={handleToggleLiked}

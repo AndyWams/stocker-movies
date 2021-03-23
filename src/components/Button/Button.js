@@ -1,7 +1,7 @@
 import "./Button.scss";
-const Button = ({ btntext, bgcolor, onClick }) => {
+const Button = ({ btntext, bgcolor, onClick, disabled }) => {
   return (
-    <button onClick={onClick} className={bgcolor}>
+    <button disabled={disabled} onClick={onClick} className={bgcolor}>
       {btntext}
     </button>
   );

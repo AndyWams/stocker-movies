@@ -9,12 +9,12 @@ const TableBody = ({ data, columns }) => {
     }
   };
   const createKey = (item, column) => {
-    return item.id + column.path || column.key;
+    return column.path || column.key;
   };
   return (
     <tbody>
       {data.map((item) => (
-        <tr key={item.id}>
+        <tr key={item._id}>
           {columns.map((column) => (
             <td key={createKey(item, column)}>{renderCell(item, column)}</td>
           ))}

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { GetGenres } from "../../service/genreService";
+
 const FilterList = ({ textProperty, selectedGenre, onHandleGenreSelect }) => {
   const [genres, setGenres] = useState([]);
 
@@ -14,8 +16,7 @@ const FilterList = ({ textProperty, selectedGenre, onHandleGenreSelect }) => {
 
   //Get genres
   const fetchGenres = async () => {
-    const res = await fetch("http://localhost:5000/genres");
-    const data = await res.json();
+    const { data } = await GetGenres();
     return data;
   };
 

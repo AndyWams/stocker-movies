@@ -54,7 +54,7 @@ const CreateMovie = () => {
         <p>Account created successfully</p>
       </div>
       <form
-        className="card movie__form mb-4"
+        className="card form-card  mb-4"
         onSubmit={onSubmit}
         autoComplete="off"
       >

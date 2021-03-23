@@ -10,23 +10,19 @@ const MovieTable = ({
 }) => {
   const columns = [
     {
-      path: "id",
-      label: "#",
-    },
-    {
       path: "title",
       label: "Title",
     },
     {
-      path: "genre",
+      path: "genre.name",
       label: "Genre",
     },
     {
-      path: "stock",
+      path: "numberInStock",
       label: "Stock",
     },
     {
-      path: "rating",
+      path: "dailyRentalRate",
       label: "Rating",
     },
     {
@@ -41,7 +37,7 @@ const MovieTable = ({
         <Button
           bgcolor="btn--danger btn-md"
           btntext="Delete"
-          onClick={() => onDelete(movie.id)}
+          onClick={() => onDelete(movie._id)}
         />
       ),
     },
