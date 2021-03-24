@@ -1,6 +1,8 @@
 import Button from "../Button/Button";
 import Favorite from "../Favorite/Favorite";
 import Table from "./Table";
+import { Link } from "react-router-dom";
+
 const MovieTable = ({
   onDelete,
   onToggleLike,
@@ -12,6 +14,9 @@ const MovieTable = ({
     {
       path: "title",
       label: "Title",
+      content: (movie) => (
+        <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+      ),
     },
     {
       path: "genre.name",

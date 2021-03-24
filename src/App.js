@@ -13,7 +13,7 @@ import FilterList from "./components/FilterList/FilterList";
 import NotFound from "./components/NotFound/NotFound";
 import LoginForm from "./components/Auth/LoginForm";
 import RegisterForm from "./components/Auth/RegisterForm";
-import CreateMovie from "./components/CreateMovie/CreateMovie";
+import MovieForm from "./components/MovieForm/MovieForm";
 import "react-toastify/dist/ReactToastify.css";
 import "./App.scss";
 
@@ -24,7 +24,17 @@ function App() {
   };
   return (
     <React.Fragment>
-      <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Router>
         <main className="main">
           <MovieProvider>
@@ -54,7 +64,14 @@ function App() {
                 />
                 <Route path="/login" render={() => <LoginForm />} />
                 <Route path="/register" render={() => <RegisterForm />} />
-                <Route path="/create-movie" render={() => <CreateMovie />} />
+                <Route
+                  path="/movies/:id"
+                  render={(props) => <MovieForm {...props} />}
+                />
+                <Route
+                  path="/create-movie/:id"
+                  render={(props) => <MovieForm {...props} />}
+                />
                 <Route path="/404" component={NotFound} />
                 <Redirect to="/404" />
                 <Redirect from="/" to="/" exact />

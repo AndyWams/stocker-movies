@@ -31,7 +31,7 @@
     "yup": "^0.32.9"
   },
   "scripts": {
-    "start": "concurrently \"npm run server\" \"react-scripts start\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "server": "json-server --watch db.json --port 5000"
