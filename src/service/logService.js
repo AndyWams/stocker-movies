@@ -4,7 +4,9 @@ function log(error) {
   console.error(error);
 }
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
-export default {
+
+const loger = {
   init,
   log,
 };
+export default loger;

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import { MovieContext } from "../../context/MovieContext";
+import auth from "../../service/authService";
 import {
   GetMovies,
   DeleteMovie,
@@ -13,10 +14,11 @@ import Paginate from "../Utils/Paginate";
 import MovieTable from "../Partials/MovieTable";
 import _ from "lodash";
 
-const Movies = ({ selectedGenre }) => {
+const Movies = ({ selectedGenre, currentPage, setCurrentPage }) => {
   const [pageSize] = useState(5);
   const [movies, setMovies] = useContext(MovieContext);
-  const [currentPage, setCurrentPage] = useState(1);
+  const user = auth.GetCurrentUser();
+
   const [sortColumn, setSortColumn] = useState({
     path: "_id",
     order: "asc",
@@ -28,9 +30,7 @@ const Movies = ({ selectedGenre }) => {
       try {
         const moviesFromServer = await fetchMovies();
         setMovies(moviesFromServer);
-      } catch (ex) {
-        console.log(ex);
-      }
+      } catch (ex) {}
     };
     getMovies();
   }, [setMovies]);
@@ -58,10 +58,8 @@ const Movies = ({ selectedGenre }) => {
       )
     );
     try {
-      await UpdateLike(id, updateMovie);
-    } catch (ex) {
-      console.log(ex);
-    }
+      await UpdateLike(updateMovie);
+    } catch (ex) {}
   };
 
   //Handle Sort
@@ -77,6 +75,7 @@ const Movies = ({ selectedGenre }) => {
   //Delete Movie
   const handleDelete = async (id) => {
     setMovies(movies.filter((movie) => movie._id !== id));
+    setCurrentPage(1);
     try {
       await DeleteMovie(id);
       toast.success("Movie successfully deleted");
@@ -107,9 +106,11 @@ const Movies = ({ selectedGenre }) => {
     <React.Fragment>
       <div className="d-flex justify-content-between mb-4">
         <h3>All Movies</h3>
-        <Link to="create-movie/new" className="btn--link">
-          Create Movies
-        </Link>
+        {user && user.isAdmin && (
+          <Link to="/movies/new" className="btn--link">
+            Create Movies
+          </Link>
+        )}
       </div>
       <p>
         showing {totalCount} <strong>movies</strong> in the database

@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
+import auth from "../../service/authService";
 import Button from "../Button/Button";
 import Input from "../Partials/Input";
 import Joi from "joi-browser";
 
-const LoginForm = () => {
+const LoginForm = ({ location }) => {
   const [data, setData] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
 
@@ -39,12 +41,21 @@ const LoginForm = () => {
     setErrors(all_errors || {});
     if (all_errors) return;
     doSubmit();
-    //call to server
   };
 
-  const doSubmit = () => {
+  const doSubmit = async () => {
     //call to server
-    console.log("submitted");
+    try {
+      await auth.Login(data.email, data.password);
+      const { state } = location;
+      window.location = state ? state.from.pathname : "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const getErr = { ...errors };
+        getErr.email = ex.response.data;
+        setErrors(getErr);
+      }
+    }
   };
 
   //On input Change
@@ -82,6 +93,7 @@ const LoginForm = () => {
     );
   };
 
+  if (auth.GetCurrentUser()) return <Redirect to="/" />;
   return (
     <div className="form--wrapper">
       <form

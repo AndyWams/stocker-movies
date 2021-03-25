@@ -1,26 +1,31 @@
-import http from "./httpService";
-import { apiUrl } from "../config.json";
+import http from './httpService'
+
+const apiEndpoint = '/movies'
+const movieUrl = (id) => {
+  return `${apiEndpoint}/${id}`
+}
 
 export const GetMovies = () => {
-  return http.get(`${apiUrl}/movies`);
-};
+  return http.get(apiEndpoint)
+}
 export const GetMovie = (movieId) => {
-  return http.get(apiUrl + "/movies/" + movieId);
-};
+  return http.get(movieUrl(movieId))
+}
 
 export const SaveMovie = (movie) => {
   if (movie._id) {
-    const body = { ...movie };
-    delete body._id;
-    return http.put(`${apiUrl}/movies/${movie._id}`, body);
+    const body = { ...movie }
+    delete body._id
+    return http.put(movieUrl(movie._id), body)
   }
-  return http.post(`${apiUrl}/movies`, movie);
-};
+  return http.post(apiEndpoint, movie)
+}
 
 export const DeleteMovie = (movieId) => {
-  return http.delete(`${apiUrl}/movies/${movieId}`);
-};
+  return http.delete(movieUrl(movieId))
+}
 
-export const UpdateLike = (movieId, movie) => {
-  return http.put(`${apiUrl}/movies/${movieId}`, { movie });
-};
+export const UpdateLike = (movie) => {
+  const movieId = movie._id
+  return http.put(movieUrl(movieId), { movie })
+}

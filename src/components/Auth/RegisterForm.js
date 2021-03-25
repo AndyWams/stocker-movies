@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Button from "../Button/Button";
 import Input from "../Partials/Input";
+import * as userService from "../../service/userService";
+import auth from "../../service/authService";
 import Joi from "joi-browser";
 
 const RegisterForm = () => {
@@ -47,9 +49,19 @@ const RegisterForm = () => {
     //call to server
   };
 
-  const doSubmit = () => {
+  const doSubmit = async () => {
     //call to server
-    console.log("submitted");
+    try {
+      const response = await userService.Register(data);
+      auth.LoginWithJwt(response.headers["x-auth-token"]);
+      window.location = "/";
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const getErr = { ...errors };
+        getErr.email = ex.response.data;
+        setErrors(getErr);
+      }
+    }
   };
 
   //On input Change

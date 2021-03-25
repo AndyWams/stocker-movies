@@ -1,27 +1,31 @@
-import React, { useState } from "react";
-import Header from "./components/Header/Header";
+import React, { useState } from 'react'
+import Header from './components/Header/Header'
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   Redirect,
-} from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import { MovieProvider } from "./context/MovieContext";
-import Movies from "./components/Movies/Movies";
-import FilterList from "./components/FilterList/FilterList";
-import NotFound from "./components/NotFound/NotFound";
-import LoginForm from "./components/Auth/LoginForm";
-import RegisterForm from "./components/Auth/RegisterForm";
-import MovieForm from "./components/MovieForm/MovieForm";
-import "react-toastify/dist/ReactToastify.css";
-import "./App.scss";
+} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
+import { MovieProvider } from './context/MovieContext'
+import Movies from './components/Movies/Movies'
+import FilterList from './components/FilterList/FilterList'
+import NotFound from './components/NotFound/NotFound'
+import LoginForm from './components/Auth/LoginForm'
+import Logout from './components/Auth/Logout'
+import RegisterForm from './components/Auth/RegisterForm'
+import MovieForm from './components/MovieForm/MovieForm'
+import 'react-toastify/dist/ReactToastify.css'
+import './App.scss'
+import ProtectedRoute from './components/common/Protectedroute'
 
-function App() {
-  const [selectedGenre, setSelectedGenre] = useState("");
+const App = () => {
+  const [selectedGenre, setSelectedGenre] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
   const handleGenreSelect = (genre) => {
-    setSelectedGenre(genre);
-  };
+    setSelectedGenre(genre)
+    setCurrentPage(1)
+  }
   return (
     <React.Fragment>
       <ToastContainer
@@ -56,20 +60,28 @@ function App() {
                           <Movies
                             selectedGenre={selectedGenre}
                             setSelectedGenre={selectedGenre}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
                           />
                         </div>
                       </div>
                     </>
                   )}
                 />
-                <Route path="/login" render={() => <LoginForm />} />
-                <Route path="/register" render={() => <RegisterForm />} />
                 <Route
-                  path="/movies/:id"
-                  render={(props) => <MovieForm {...props} />}
+                  path="/login"
+                  render={(props) => <LoginForm {...props} />}
                 />
                 <Route
-                  path="/create-movie/:id"
+                  path="/logout"
+                  render={(props) => <Logout {...props} />}
+                />
+                <Route
+                  path="/register"
+                  render={(props) => <RegisterForm {...props} />}
+                />
+                <ProtectedRoute
+                  path="/movies/:id"
                   render={(props) => <MovieForm {...props} />}
                 />
                 <Route path="/404" component={NotFound} />
@@ -81,7 +93,7 @@ function App() {
         </main>
       </Router>
     </React.Fragment>
-  );
+  )
 }
 
-export default App;
+export default App
