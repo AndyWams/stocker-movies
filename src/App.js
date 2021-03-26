@@ -22,8 +22,15 @@ import ProtectedRoute from './components/common/Protectedroute'
 const App = () => {
   const [selectedGenre, setSelectedGenre] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
+  const [searchQuery, setSearchQuery] = useState('')
   const handleGenreSelect = (genre) => {
     setSelectedGenre(genre)
+    setSearchQuery('')
+    setCurrentPage(1)
+  }
+  const handleSearch = (query) => {
+    setSearchQuery(query)
+    setSelectedGenre(null)
     setCurrentPage(1)
   }
   return (
@@ -62,6 +69,8 @@ const App = () => {
                             setSelectedGenre={selectedGenre}
                             currentPage={currentPage}
                             setCurrentPage={setCurrentPage}
+                            onHandleSearch={handleSearch}
+                            searchQuery={searchQuery}
                           />
                         </div>
                       </div>

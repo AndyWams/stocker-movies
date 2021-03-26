@@ -1,4 +1,4 @@
-import Input from "../Partials/Input";
+import Input from '../Partials/Input'
 
 const Searchbox = ({ value, onChange }) => {
   return (
@@ -6,9 +6,11 @@ const Searchbox = ({ value, onChange }) => {
       name="query"
       value={value}
       placeholder="Search..."
+      className="form-control"
+      autoComplete="off"
       onChange={(e) => onChange(e.target.value)}
     />
-  );
-};
+  )
+}
 
-export default Searchbox;
+export default Searchbox
