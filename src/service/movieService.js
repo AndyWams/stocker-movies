@@ -24,8 +24,3 @@ export const SaveMovie = (movie) => {
 export const DeleteMovie = (movieId) => {
   return http.delete(movieUrl(movieId))
 }
-
-export const UpdateLike = (movie) => {
-  const movieId = movie._id
-  return http.put(movieUrl(movieId), { movie })
-}

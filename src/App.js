@@ -71,6 +71,7 @@ const App = () => {
                             setCurrentPage={setCurrentPage}
                             onHandleSearch={handleSearch}
                             searchQuery={searchQuery}
+                            {...props}
                           />
                         </div>
                       </div>

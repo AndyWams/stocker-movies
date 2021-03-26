@@ -1,16 +1,9 @@
 import Button from '../Button/Button'
-import Favorite from '../Favorite/Favorite'
 import auth from '../../service/authService'
 import Table from './Table'
 import { Link } from 'react-router-dom'
 
-const MovieTable = ({
-  onDelete,
-  onToggleLike,
-  onSort,
-  sortColumn,
-  allmovies,
-}) => {
+const MovieTable = ({ onDelete, onSort, sortColumn, allmovies }) => {
   const user = auth.GetCurrentUser()
   const columns = [
     {
@@ -38,26 +31,17 @@ const MovieTable = ({
   ]
   const updateColumn = () => {
     if (user && user.isAdmin) {
-      columns.push(
-        {
-          key: 'like',
-          label: 'Like',
-          content: (movie) => (
-            <Favorite movie={movie} onToggle={onToggleLike} />
-          ),
-        },
-        {
-          key: 'delete',
-          label: 'Action',
-          content: (movie) => (
-            <Button
-              bgcolor="btn--danger btn-md"
-              btntext="Delete"
-              onClick={() => onDelete(movie._id)}
-            />
-          ),
-        },
-      )
+      columns.push({
+        key: 'delete',
+        label: 'Action',
+        content: (movie) => (
+          <Button
+            bgcolor="btn--danger btn-md"
+            btntext="Delete"
+            onClick={() => onDelete(movie._id)}
+          />
+        ),
+      })
     }
   }
   updateColumn()

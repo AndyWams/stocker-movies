@@ -2,12 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { MovieContext } from '../../context/MovieContext'
 import auth from '../../service/authService'
-import {
-  GetMovies,
-  DeleteMovie,
-  GetMovie,
-  UpdateLike,
-} from '../../service/movieService'
+import { GetMovies, DeleteMovie } from '../../service/movieService'
 import { toast } from 'react-toastify'
 import Pagination from '../Pagination/Pagination'
 import Paginate from '../Utils/Paginate'
@@ -46,27 +41,6 @@ const Movies = ({
   const fetchMovies = async () => {
     const { data } = await GetMovies()
     return data
-  }
-
-  //Get Movie
-  const fetchMovie = async (id) => {
-    const { data } = await GetMovie(id)
-    return data
-  }
-
-  //Toggle Liked
-  const handleToggleLiked = async (id) => {
-    const movieToToggle = await fetchMovie(id)
-    const like = false
-    let updateMovie = { ...movieToToggle, liked: !like }
-    setMovies(
-      movies.map((movie) =>
-        movie._id === id ? { ...movie, liked: updateMovie.liked } : movie,
-      ),
-    )
-    try {
-      await UpdateLike(updateMovie)
-    } catch (ex) {}
   }
 
   //Handle Sort
@@ -130,7 +104,6 @@ const Movies = ({
       <Searchbox value={searchQuery} onChange={onHandleSearch} />
       <MovieTable
         onDelete={handleDelete}
-        onToggleLike={handleToggleLiked}
         onHandleSort={handleSort}
         allmovies={data}
         sortColumn={sortColumn}
