@@ -9,6 +9,7 @@ import Paginate from '../Utils/Paginate'
 import MovieTable from '../Partials/MovieTable'
 import Searchbox from '../Searchbox/Searchbox'
 import _ from 'lodash'
+import Spinner from '../spinner/spinner'
 
 const Movies = ({
   selectedGenre,
@@ -19,6 +20,7 @@ const Movies = ({
 }) => {
   const [pageSize] = useState(5)
   const [movies, setMovies] = useContext(MovieContext)
+  const [loading, setLoading] = useState(false)
   const user = auth.GetCurrentUser()
 
   const [sortColumn, setSortColumn] = useState({
@@ -30,8 +32,12 @@ const Movies = ({
   useEffect(() => {
     const getMovies = async () => {
       try {
+        setLoading(true)
         const moviesFromServer = await fetchMovies()
-        setMovies(moviesFromServer)
+        if (moviesFromServer) {
+          setLoading(false)
+          setMovies(moviesFromServer)
+        }
       } catch (ex) {}
     }
     getMovies()
@@ -101,20 +107,26 @@ const Movies = ({
       <p>
         showing {totalCount} <strong>movies</strong> in the database
       </p>
-      <Searchbox value={searchQuery} onChange={onHandleSearch} />
-      <MovieTable
-        onDelete={handleDelete}
-        onHandleSort={handleSort}
-        allmovies={data}
-        sortColumn={sortColumn}
-        onSort={handleSort}
-      />
-      <Pagination
-        itemCount={totalCount}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        onPageChange={handlePageChange}
-      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <React.Fragment>
+          <Searchbox value={searchQuery} onChange={onHandleSearch} />
+          <MovieTable
+            onDelete={handleDelete}
+            onHandleSort={handleSort}
+            allmovies={data}
+            sortColumn={sortColumn}
+            onSort={handleSort}
+          />
+          <Pagination
+            itemCount={totalCount}
+            currentPage={currentPage}
+            pageSize={pageSize}
+            onPageChange={handlePageChange}
+          />
+        </React.Fragment>
+      )}
     </React.Fragment>
   )
 }

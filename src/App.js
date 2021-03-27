@@ -63,7 +63,7 @@ const App = () => {
                           selectedGenre={selectedGenre}
                           {...props}
                         />
-                        <div>
+                        <div className="movies-content">
                           <Movies
                             selectedGenre={selectedGenre}
                             setSelectedGenre={selectedGenre}

@@ -22,7 +22,7 @@ const FilterList = ({ textProperty, selectedGenre, onHandleGenreSelect }) => {
 
   return (
     <div className="list-group">
-      <div>
+      <div className="list-content">
         {genres.map((item) => {
           return (
             <button
