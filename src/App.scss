@@ -1,6 +1,16 @@
 main.main {
-  header .navbar-nav .nav-link {
-    text-transform: capitalize;
+  header .navbar {
+    .navbar-nav .nav-link {
+      text-transform: capitalize;
+    }
+    @media screen and (min-width: 320px) and (max-width: 767px) {
+      .navbar-nav {
+        display: none !important;
+      }
+      .container .d-flex &:first-child {
+        width: -webkit-fill-available;
+      }
+    }
   }
 }
 
@@ -34,10 +44,13 @@ main.main {
       color: #02a9f4;
     }
   }
+  @media screen and (min-width: 320px) and (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
 }
 .btn--link {
   padding: 8px 24px;
-  border-radius: 10px;
+  border-radius: 5px;
   background: #03a9f4;
   color: #fff;
   transition: 0.5s ease-in;
@@ -98,10 +111,10 @@ main.main {
         font-size: 14px;
         color: rgba(30, 31, 32, 0.5);
       }
-      input[type="number"],
-      input[type="password"],
+      input[type='number'],
+      input[type='password'],
       select,
-      input[type="text"] {
+      input[type='text'] {
         display: block;
         padding: 1em 20px;
         border: none;
@@ -139,7 +152,7 @@ main.main {
         cursor: pointer;
       }
       select {
-        background: url("/assets/img/svg/arrow-down.svg") 95% center no-repeat
+        background: url('/assets/img/svg/arrow-down.svg') 95% center no-repeat
           rgba(228, 228, 228, 0.49776) !important;
         appearance: none;
         &:invalid,
@@ -151,6 +164,22 @@ main.main {
         border-radius: 10px;
         font-size: 12px;
       }
+    }
+  }
+}
+
+.page--not--found {
+  padding: 3em 0em 2em;
+  height: 94vh;
+  h4 {
+    font-weight: bold;
+  }
+  p small {
+    color: #a1a1a2;
+  }
+  .banner {
+    img {
+      width: 100%;
     }
   }
 }

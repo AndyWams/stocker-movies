@@ -90,7 +90,7 @@ const Movies = ({
   const { totalCount, data } = getPageData()
   return (
     <React.Fragment>
-      <div className="d-flex justify-content-between mb-4">
+      <div className="d-flex align-items-center justify-content-between mb-4">
         <h3>All Movies</h3>
         {user && user.isAdmin && (
           <Link to="/movies/new" className="btn--link">

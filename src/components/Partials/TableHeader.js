@@ -1,40 +1,45 @@
 const TableHeader = ({ columns, sortColumn, onSort }) => {
   const raiseSort = (path) => {
-    const sortcolumn = { ...sortColumn };
+    const sortcolumn = { ...sortColumn }
     if (sortcolumn.path === path) {
-      sortcolumn.order = sortcolumn.order === "asc" ? "desc" : "asc";
+      sortcolumn.order = sortcolumn.order === 'asc' ? 'desc' : 'asc'
     } else {
-      sortcolumn.path = path;
-      sortcolumn.order = "asc";
+      sortcolumn.path = path
+      sortcolumn.order = 'asc'
     }
-    onSort(sortcolumn);
-  };
+    onSort(sortcolumn)
+  }
   const renderSortIcon = (column) => {
     if (column.path !== sortColumn.path) {
-      return null;
+      return null
     }
-    if (sortColumn.order === "asc") {
-      return <i className="fa fa-sort-asc"></i>;
+    if (sortColumn.order === 'asc') {
+      return <i className="fa fa-sort-asc"></i>
     }
-    return <i className="fa fa-sort-desc"></i>;
-  };
+    return <i className="fa fa-sort-desc"></i>
+  }
   return (
     <thead>
       <tr>
-        {columns.map((column) => {
+        {columns.map((column, index) => {
+          let headerWidth
+          if (index === 4) {
+            headerWidth = '10%'
+          }
           return (
             <th
               key={column.path || column.key}
               onClick={() => raiseSort(column.path)}
+              style={{ width: headerWidth }}
             >
               {column.label}
               {renderSortIcon(column)}
             </th>
-          );
+          )
         })}
       </tr>
     </thead>
-  );
-};
+  )
+}
 
-export default TableHeader;
+export default TableHeader

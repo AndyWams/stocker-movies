@@ -1,13 +1,13 @@
-import { NavLink } from "react-router-dom";
-import auth from "../../service/authService";
+import { NavLink } from 'react-router-dom'
+import auth from '../../service/authService'
 
 const Navbar = () => {
-  const user = auth.GetCurrentUser();
+  const user = auth.GetCurrentUser()
   return (
     <header>
       <nav className="navbar navbar-light bg-light">
         <div className="container  d-flex navbar-light bg-light justify-content-between">
-          <div className="d-flex">
+          <div className="d-flex justify-content-between">
             <NavLink className="navbar-brand mr-5" to="/">
               Stocker Movies
             </NavLink>
@@ -48,7 +48,7 @@ const Navbar = () => {
         </div>
       </nav>
     </header>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
